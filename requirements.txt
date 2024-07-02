@@ -6,6 +6,7 @@ feature_engine
 streamlit
 scikit-learn
 xgboost
+dill
 
 
 -e .
