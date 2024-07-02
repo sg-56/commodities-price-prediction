@@ -1,0 +1,11 @@
+pandas
+matplotlib
+seaborn
+plotly
+feature_engine
+streamlit
+sklearn
+xgboost
+
+
+-e .

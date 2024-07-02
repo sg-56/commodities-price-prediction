@@ -1,0 +1,10 @@
+organisation,Ministry of Consumer Affairs Food and Public Distribution
+sectors,"Food, Agriculture and Allied"
+updated_frequency,Daily
+granularity,"Daily, State, Commodity"
+time_saved,4 hours
+source,"Department of Consumer Affairs"
+source_link,"https://fcainfoweb.nic.in/reports/report_menu_web.aspx"
+time_period,"2014 to 2024"
+units,"price in rupees per quintal, price in rupees per hundred litres, price in rupees per litre, price in rupees per kilogram"
+citation,"Ministry of Consumer Affairs Food and Public Distribution. Daily Wholesale and Retail Prices of Essential Commodities in Karnataka [Data set]. Dataful. https://dataful.in/datasset/19913"
