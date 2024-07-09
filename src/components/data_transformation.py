@@ -14,7 +14,7 @@ from src.exception import CustomException
 from src.logger import logging
 import os
 
-from src.utils import save_object
+from src.utils import save_object,create_features
 
 @dataclass
 class DataTransformationConfig:
@@ -31,7 +31,7 @@ class DataTransformation:
         '''
         try:
             #Encoding Cyclic Features i.e (Day,Month,dayofweek,dayofmonth,dayofyear,dayofmonth)
-            cyclic_features = ['dayofweek','quarter','month','dayofyear','dayofmonth','weekofyear']
+            cyclic_features = ['dayofweek', 'quarter', 'month', 'year','dayofyear', 'dayofmonth', 'weekofyear']
             cat_feature = ['market','commodity']
             price_imputer = Pipeline(
                 steps=[
@@ -41,17 +41,16 @@ class DataTransformation:
             cyclic_pipeline=Pipeline(
 
                 steps=[
-                ("Cyclic",CyclicalFeatures(variables=cyclic_features,drop_original=True))
+                ("Cyclic",CyclicalFeatures(drop_original=True))
                 ]
             )
             category_pipeline = Pipeline(
-                steps=[("one_hot_encoder",OneHotEncoder(variables=cat_feature))
+                steps=[("one_hot_encoder",OneHotEncoder())
                 ]
             )
 
             preprocessor=ColumnTransformer(
                 [
-                ("num_pipeline",price_imputer,['price']),
                 ("Cyclic_Pipeline",cyclic_pipeline,cyclic_features),
                 ("cat_pipelines",category_pipeline,cat_feature)
                 ]
@@ -65,37 +64,54 @@ class DataTransformation:
         except Exception as e:
             raise CustomException(e,sys)
         
+    def Get_TargetData_preprocessor(self):
+        imputer = KNNImputer(n_neighbors=15)
+        return imputer
+            
     def initiate_data_transformation(self,train_path,test_path):
 
         try:
-            train_df=pd.read_csv(train_path)
-            test_df=pd.read_csv(test_path)
+            train_df=pd.read_csv(train_path,parse_dates=True,index_col='date')
+            test_df=pd.read_csv(test_path,parse_dates=True,index_col="date")
 
             logging.info("Read train and test data completed")
+            logging.info(train_df.columns)
+            logging.info(test_df.columns)
+            train_df = create_features(train_df)
+            test_df = create_features(test_df)
 
             logging.info("Obtaining preprocessing object")
 
             preprocessing_obj=self.get_data_transformer_object()
+            target_column_name=['price']
 
-            target_column_name="price"
+            input_feature_train_df=train_df.drop(columns=[target_column_name[0]],axis=1)
 
-            input_feature_train_df=train_df.drop(columns=[target_column_name],axis=1)
             target_feature_train_df=train_df[target_column_name]
+            n = input("Stop : ")
+            num_pre = self.Get_TargetData_preprocessor()
+            target_feature_train_df = num_pre.fit_transform(target_feature_train_df)
+            #print(target_feature_train_df.isnull().sum())
+            #print(target_feature_train_df.shape)
 
-            input_feature_test_df=test_df.drop(columns=[target_column_name],axis=1)
+            input_feature_test_df=test_df.drop(columns=[target_column_name[0]],axis=1)
             target_feature_test_df=test_df[target_column_name]
+            target_feature_test_df = num_pre.transform(target_feature_test_df)
+            print(target_feature_test_df.shape)
+            
 
             logging.info(
                 f"Applying preprocessing object on training dataframe and testing dataframe."
             )
-
+            logging.info(input_feature_train_df.columns)
+            logging.info(input_feature_test_df.columns)
             input_feature_train_arr=preprocessing_obj.fit_transform(input_feature_train_df)
             input_feature_test_arr=preprocessing_obj.transform(input_feature_test_df)
 
-            train_arr = np.c_[
-                input_feature_train_arr, np.array(target_feature_train_df)
-            ]
-            test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
+            X_train = input_feature_train_arr
+            y_train = target_feature_train_df
+            X_test = input_feature_test_arr
+            y_test = target_feature_test_df
 
             logging.info(f"Saved preprocessing object.")
 
@@ -107,8 +123,10 @@ class DataTransformation:
             )
 
             return (
-                train_arr,
-                test_arr,
+                X_train,
+                y_train,
+                X_test,
+                y_test,
                 self.data_transformation_config.preprocessor_obj_file_path,
             )
         except Exception as e:

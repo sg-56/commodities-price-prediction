@@ -1,9 +1,9 @@
 import streamlit as st
-from src.utils import hide_sidebar
+from src.logger import logging
 
 
 st.set_page_config(page_title="Prediction of Commodities",layout="wide",initial_sidebar_state="collapsed")
-hide_sidebar()
+
 
 
 st.markdown("# Prediction of Prices of Essential Commodities in Karnataka")

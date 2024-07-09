@@ -23,6 +23,8 @@ Predicting the prices of essential commodities such as food grains, vegetables, 
 Data is gathered from the following sources:
 - Historical price data from government databases and market reports.
 
+   ## Source : [text](https://dataful.in/datasets/19913/)
+
 
 ## Data Preprocessing
 Data preprocessing involves:
@@ -63,9 +65,9 @@ Ongoing processes include:
 
 ## Getting Started
 ### Prerequisites
-- Python 3.8+
+- Python 3.10+
 - Jupyter Notebook
-- Libraries: pandas, numpy, scikit-learn, statsmodels, tensorflow, matplotlib, seaborn, fbprophet
+- Libraries: pandas, numpy, scikit-learn, statsmodels, tensorflow, matplotlib, seaborn,xgboost,feature-engine
 
 ### Installation
 1. Clone the repository:
@@ -76,9 +78,20 @@ Ongoing processes include:
    ```sh
    cd commodity-price-prediction
    ```
+   
 3. Install the required libraries:
    ```sh
    pip install -r requirements.txt
+   ```
+
+4. Install the required libraries:
+   ```sh
+   run python3 Initiate.py to complete data preprocessing and model building
+   ```
+
+5. Run the streamlit app by:
+   ```
+   run streamlit run app.py ##The app will be running on localhost:8501
    ```
 
 ### Usage

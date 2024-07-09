@@ -6,8 +6,6 @@ from src.pipelines.predict_pipeline import CustomData
 
 st.set_page_config(page_title="Prediction of Commodities",layout="wide",initial_sidebar_state="collapsed")
  
-    
-hide_sidebar()
 
 
 

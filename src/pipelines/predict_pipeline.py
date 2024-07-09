@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 from src.exception import CustomException
 from src.utils import load_object,GetCommodities,create_features
+from src.logger import logging
 
 
 class PredictPipeline:
@@ -13,12 +14,14 @@ class PredictPipeline:
     def predict(self,features):
         try:
             model_path=os.path.join("artifacts","model.pkl")
-            preprocessor_path=os.path.join('artifacts','preprocessor.pkl')
-            print("Before Loading")
+            preprocessor_path=os.path.join('artifacts','proprocessor.pkl')
+            logging.info("Model and Preprocessor Loaded")
             model=load_object(file_path=model_path)
             preprocessor=load_object(file_path=preprocessor_path)
-            print("After Loading")
+            logging.info("Transforming Input Data")
+            print(features.shape)
             data_scaled=preprocessor.transform(features)
+            print(data_scaled.shape)
             preds=model.predict(data_scaled)
             return preds
         
