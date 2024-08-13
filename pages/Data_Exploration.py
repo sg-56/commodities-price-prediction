@@ -26,7 +26,6 @@ with st.container(border=True):
     with info_cols[1]:
         st.image(getImages(commodity_name=commodity))
     f = data.loc[(data["commodity"] == commodity)]
-    f['MA'] = f['price'].rolling(52).mean()
     metrics = st.columns(3)
     with metrics[0]:
         min_retail_price = f.loc[f['market'] == "Retail"]['price'].min()
