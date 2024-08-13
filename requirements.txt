@@ -7,6 +7,7 @@ streamlit
 scikit-learn
 xgboost
 dill
+streamlit_shadcn_ui
 
 
--e .
+# -e .
