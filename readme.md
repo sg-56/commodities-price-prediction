@@ -72,7 +72,7 @@ Ongoing processes include:
 ### Installation
 1. Clone the repository:
    ```sh
-   git clone https://github.com/sg-56/commodity-price-prediction.git
+   git clone https://github.com/sg-56/commodities-price-prediction
    ```
 2. Navigate to the project directory:
    ```sh

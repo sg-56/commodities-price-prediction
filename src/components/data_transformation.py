@@ -88,7 +88,7 @@ class DataTransformation:
             input_feature_train_df=train_df.drop(columns=[target_column_name[0]],axis=1)
 
             target_feature_train_df=train_df[target_column_name]
-            n = input("Stop : ")
+            # n = input("Stop : ")
             num_pre = self.Get_TargetData_preprocessor()
             target_feature_train_df = num_pre.fit_transform(target_feature_train_df)
             #print(target_feature_train_df.isnull().sum())

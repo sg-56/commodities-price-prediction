@@ -35,7 +35,7 @@ class ModelTrainer:
             models = {
                 'Xgboost' : XGBRegressor(n_jobs = -1),
                 'DecisionTrees': DecisionTreeRegressor(),
-                'RandomforestRegressor': RandomForestRegressor(n_estimators=100,n_jobs=-1),
+                'RandomforestRegressor': RandomForestRegressor(n_estimators=100,max_depth=20,min_samples_leaf=4,min_samples_split=8,n_jobs=-1),
                 'GradientBoosting': GradientBoostingRegressor(),
                 'LinearRegression': LinearRegression(n_jobs=-1),
             }
@@ -47,28 +47,28 @@ class ModelTrainer:
             results.to_csv(self.model_trainer_config.results_path,index=False)
             logging.info(f"Training and Evaluation Complete!")
 
-            rf_params = {
-                        'n_estimators': [100, 200, 300], #https://numpy.org/doc/stable/reference/random/generated/numpy.random.randint.html
-                        'max_depth': [None, 10, 20, 30],
-                        'min_samples_split': [2, 5, 10],
-                        'min_samples_leaf': [1, 2, 4],
-                        'max_features': ['auto', 'sqrt', 'log2']
-                        }
+            # rf_params = {
+            #             'n_estimators': [100, 200, 300], #https://numpy.org/doc/stable/reference/random/generated/numpy.random.randint.html
+            #             'max_depth': [None,20, 30],
+            #             'min_samples_split': [2, 5, 10],
+            #             'min_samples_leaf': [1, 2, 4]
+            #             }
             
-            rf_grid_search = GridSearchCV(estimator=RandomForestRegressor(random_state=42),
-                              param_grid=rf_params, cv=5,n_jobs=-1)
+            # rf_grid_search = GridSearchCV(estimator=RandomForestRegressor(random_state=42),
+            #                   param_grid=rf_params, cv=5,verbose=10)
             
-            logging.info("Grid Search CV initialized for Random Forest")
-            rf_grid_search.fit(X_train, y_train)
+            # logging.info("Grid Search CV initialized for Random Forest")
+            # rf_grid_search.fit(X_train, y_train)
 
-            logging.info("Cross validation finished!")
-            logging.info(f"Best Parameters :  {rf_grid_search.best_params_}")
+            # logging.info("Cross validation finished!")
+            # logging.info(f"Best Parameters :  {rf_grid_search.best_params_}")
 
 
-            rf_grid_score = evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test)
-            print(rf_grid_score)
+            # rf_grid_score = evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,
+            #                                 models={'GridSearchCVRFR':rf_grid_search.best_estimator_})
+            # print(rf_grid_score)
 
-            d = input("Model Complete!: !")
+            # d = input("Model Complete!: !")
 
             save_object(
                 file_path=self.model_trainer_config.trained_model_file_path,
